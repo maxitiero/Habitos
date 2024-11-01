@@ -3,7 +3,7 @@ import { View, TextInput, Button, Text, StyleSheet, ActivityIndicator } from 're
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-export default function LoginScreen() {
+export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
