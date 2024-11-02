@@ -1,13 +1,16 @@
 import { Stack } from "expo-router";
+import { Provider as PaperProvider } from 'react-native-paper';
 
 export default function RootLayout() {
   return (
-    <Stack initialRouteName="login">
-      <Stack.Screen name="index"/>
-      <Stack.Screen name="login"/>
-      <Stack.Screen name="habitList"/>
-      <Stack.Screen name="habitDetail" />
-      <Stack.Screen name="addHabit" />
-    </Stack>
+    <PaperProvider>
+      <Stack initialRouteName="login">
+        <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="habitList" />
+        <Stack.Screen name="habitDetail" />
+        <Stack.Screen name="addHabit" />
+      </Stack>
+    </PaperProvider>
   );
 }
