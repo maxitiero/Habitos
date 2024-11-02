@@ -7,6 +7,7 @@ export default function RootLayout() {
       <Stack initialRouteName="login">
         <Stack.Screen name="index" />
         <Stack.Screen name="login" />
+        <Stack.Screen name="register" />
         <Stack.Screen name="habitList" />
         <Stack.Screen name="habitDetail" />
         <Stack.Screen name="addHabit" />

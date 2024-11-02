@@ -3,6 +3,7 @@ import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Button, TextInput, Text } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 
 const styles = StyleSheet.create({
     container: {
@@ -33,6 +34,8 @@ const styles = StyleSheet.create({
 
 
 export default function Login() {
+    const router = useRouter();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -72,9 +75,11 @@ export default function Login() {
                 console.log("Inicio de sesión exitoso:", userCredential.user);
                 setEmail('');
                 setPassword('');
+                router.push('/habitList')
             })
             .catch((error) => {
                 console.log("Error de inicio de sesión:", error);
+
                 if (error.code === 'auth/user-not-found') {
                     Alert.alert("Error", "No hay un usuario registrado con este correo.");
                 } else if (error.code === 'auth/wrong-password') {
