@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace 'com.ivan.habitosApp'
     compileSdkVersion 33
     defaultConfig {
         applicationId "com.ivan.habitosApp" // Asegúrate de que esté correcto
