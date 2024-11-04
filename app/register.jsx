@@ -1,10 +1,54 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert, Text } from "react-native";
 import { auth } from "../firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-/*import { Button, TextInput, Text } from "react-native-paper";*/
-import { useRouter } from "expo-router"; // Asegúrate de importar useRouter
-import { Text } from "react-native";
+import { Button, TextInput, DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import { useRouter } from "expo-router";
+
+const theme = {
+    ...DefaultTheme,
+    colors: {
+        ...DefaultTheme.colors,
+        text: 'black', // Cambiar el color del texto a negro
+        primary: '#6200ee',
+        // Puedes personalizar más colores aquí si lo deseas
+    },
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        padding: 16,
+        width: "80%",
+        alignItems: "center",
+        marginHorizontal: "auto",
+    },
+    input: {
+        height: 40,
+        borderColor: "gray",
+        borderWidth: 1,
+        marginBottom: 12,
+        paddingLeft: 8,
+        width: "100%",
+        backgroundColor: "#f0f0f0", //Cambia a un tono más claro
+        color: "black", // Mantiene el color del texto
+    },
+    errorText: {
+        color: "red",
+        marginTop: 10,
+    },
+
+    buttonLogIn: {
+        height: 40,
+        width: "100%",
+    },
+    buttonSignUp: {
+        height: 40,
+        width: "100%",
+    },
+});
+
 const Register = () => {
     const router = useRouter(); // Inicializa el enrutador
     const [email, setEmail] = useState("");
@@ -53,6 +97,7 @@ const Register = () => {
     };
 
     return (
+        <PaperProvider theme={theme}>
         <View style={styles.container}>
             <TextInput
                 placeholder="Email"
@@ -61,6 +106,7 @@ const Register = () => {
                 onChangeText={setEmail}
                 style={styles.input}
                 autoCapitalize="none"
+                theme={{ colors: { text: 'black' } }} // Cambiar el color del texto del input
             />
             <TextInput
                 placeholder="Contraseña"
@@ -69,6 +115,7 @@ const Register = () => {
                 value={password}
                 onChangeText={setPassword}
                 style={styles.input}
+                theme={{ colors: { text: 'black' } }}
             />
             <Button
                 style={styles.buttonSignUp}
@@ -79,41 +126,7 @@ const Register = () => {
             </Button>
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
+        </PaperProvider>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        padding: 16,
-        width: "80%",
-        alignItems: "center",
-        marginHorizontal: "auto",
-    },
-    input: {
-        height: 40,
-        borderColor: "gray",
-        borderWidth: 1,
-        marginBottom: 12,
-        paddingLeft: 8,
-        width: "100%",
-        backgroundColor: "#f0f0f0", //Cambia a un tono más claro
-        color: "black", // Mantiene el color del texto
-    },
-    errorText: {
-        color: "red",
-        marginTop: 10,
-    },
-
-    buttonLogIn: {
-        height: 40,
-        width: "100%",
-    },
-    buttonSignUp: {
-        height: 40,
-        width: "100%",
-    },
-});
-
 export default Register;

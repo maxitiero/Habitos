@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
         color: "red",
         marginTop: 10,
     },
+    registerText: {
+        marginTop: 20,
+        textAlign: "center",
+        color: 'black',
+    },
 });
 
 const Login = () => {
@@ -134,6 +139,17 @@ const Login = () => {
             </Button>
             {loading && <ActivityIndicator size="large" color="#0000ff" />}
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            {/* Texto para dirigir al registro */}
+            <Text style={styles.registerText}>
+                ¿No tienes una cuenta?{" "}
+                <Text
+                    style={{ color: "blue", textDecorationLine: "underline" }}
+                    onPress={() => router.push("/register")} // Cambia "/register" por la ruta de tu componente de registro
+                >
+                    Crea una cuenta
+                </Text>
+            </Text>
         </View>
     );
 };

@@ -7,7 +7,7 @@ android {
     namespace 'com.ivan.habitosApp'
     compileSdkVersion 33
     defaultConfig {
-        applicationId "com.ivan.habitosApp" // Asegúrate de que esté correcto
+        applicationId "1:636541102579:android:ffcd640e56a8236e5a0a86" // com.ivan.habitosApp Asegúrate de que esté correcto
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
