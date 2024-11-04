@@ -1,5 +1,11 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { initializeApp } from "firebase/app";
+import {
+    browserLocalPersistence,
+    getAuth,
+    setPersistence,
+    inMemoryPersistence,
+} from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD7BrQrcoWO3xycBT3hMAD2J5y76Sivajo",
@@ -12,5 +18,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
 
-export const auth = getAuth(app);
+setPersistence(auth, inMemoryPersistence)
+    .then(() => {
+        console.log("Persistencia configurada con éxito.");
+    })
+    .catch((error) => {
+        console.error("error al configurar la persistencia", error);
+    });
+
+export { auth };
