@@ -3,7 +3,7 @@ import { View, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { auth } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Button, TextInput, Text } from "react-native-paper";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const styles = StyleSheet.create({
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 });
 
 const Login = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -90,7 +90,7 @@ const Login = () => {
             setPassword("");
 
             //navegar a la lista de habitos
-            router.push("/habitList");
+            navigation.navigate("habitList");
         } catch (error) {
             console.log("Error de inicio de sesion", error);
             if (error.code === "auth/user-not-found") {
@@ -145,7 +145,9 @@ const Login = () => {
                 ¿No tienes una cuenta?{" "}
                 <Text
                     style={{ color: "blue", textDecorationLine: "underline" }}
-                    onPress={() => router.push("/register")} // Cambia "/register" por la ruta de tu componente de registro
+                    onPress={() => {
+                        navigation.navigate("register");
+                    }}
                 >
                     Crea una cuenta
                 </Text>

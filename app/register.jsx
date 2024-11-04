@@ -3,7 +3,7 @@ import { View, StyleSheet, Alert, Text } from "react-native";
 import { auth } from "../firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Button, TextInput, DefaultTheme, Provider as PaperProvider } from "react-native-paper";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 const theme = {
     ...DefaultTheme,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 });
 
 const Register = () => {
-    const router = useRouter(); // Inicializa el enrutador
+    const navigation = useNavigation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -84,7 +84,7 @@ const Register = () => {
                 );
                 // Redirigir después de un breve retraso
                 setTimeout(() => {
-                    router.push("/login"); // Redirige automáticamente
+                    navigation.navigate("login"); // Navegar a Login automáticamente
                 }, 1500); // Espera 1.5 segundos (1500 ms)
 
                 setEmail("");
