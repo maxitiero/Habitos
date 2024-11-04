@@ -1,9 +1,10 @@
 // app/index.jsx
 import React from "react";
 import { Text } from "react-native";
+import Login from "./login";
 
 const App = () => {
-    return <Text>Bienvenido a la aplicacion de habitos</Text>;
+    return <Login />;
 };
 
 export default App;
