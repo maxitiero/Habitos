@@ -5,6 +5,7 @@ import {
     setPersistence,
     inMemoryPersistence,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
@@ -18,6 +19,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+const db = getFirestore(app);
 const auth = getAuth(app);
 
 setPersistence(auth, inMemoryPersistence)
@@ -28,4 +30,4 @@ setPersistence(auth, inMemoryPersistence)
         console.error("error al configurar la persistencia", error);
     });
 
-export { auth };
+export { db, auth };
