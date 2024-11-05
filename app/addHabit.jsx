@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { View, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput, Button, Switch, Text, TouchableRipple, IconButton } from 'react-native-paper';
-
 
 const styles = StyleSheet.create({
   container: {
@@ -19,12 +19,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#1e1e1e',
     color: '#FFFFFF',
-  },
-  colorSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
   },
   label: {
     color: '#FFF',
@@ -49,6 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
+    marginTop: '15px',
   },
   dayButton: {
     flex: 1,
@@ -77,12 +72,50 @@ const AddHabit = ({ navigation }) => {
     Sab: false,
     Dom: false,
   });
-  const [reminder, setReminder] = useState(false);
-  const [goal, setGoal] = useState(false);
-  const [routine, setRoutine] = useState('');
+
+  // Cargar configuración guardada al iniciar el componente
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const savedTitle = await AsyncStorage.getItem('title');
+        const savedDescription = await AsyncStorage.getItem('description');
+        const savedColor = await AsyncStorage.getItem('color');
+        const savedRepeat = await AsyncStorage.getItem('repeat');
+        const savedDays = await AsyncStorage.getItem('days');
+        
+        if (savedTitle) setTitle(savedTitle);
+        if (savedDescription) setDescription(savedDescription);
+        if (savedColor) setColor(savedColor);
+        if (savedRepeat) setRepeat(savedRepeat);
+        if (savedDays) setDays(JSON.parse(savedDays));
+      } catch (error) {
+        console.log("Error loading settings:", error);
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  // Guardar configuración al actualizar el estado
+  const saveSettings = async () => {
+    try {
+      await AsyncStorage.setItem('title', title);
+      await AsyncStorage.setItem('description', description);
+      await AsyncStorage.setItem('color', color);
+      await AsyncStorage.setItem('repeat', repeat);
+      await AsyncStorage.setItem('days', JSON.stringify(days));
+      console.log("Settings saved successfully");
+    } catch (error) {
+      console.log("Error saving settings:", error);
+    }
+  };
 
   const toggleDay = (day) => {
-    setDays((prevDays) => ({ ...prevDays, [day]: !prevDays[day] }));
+    setDays((prevDays) => {
+      const newDays = { ...prevDays, [day]: !prevDays[day] };
+      saveSettings();  // Guardar configuración cuando se cambian los días
+      return newDays;
+    });
   };
 
   return (
@@ -92,7 +125,10 @@ const AddHabit = ({ navigation }) => {
       <TextInput
         placeholder="Título"
         value={title}
-        onChangeText={setTitle}
+        onChangeText={(text) => {
+          setTitle(text);
+          saveSettings();
+        }}
         style={styles.input}
         textColor="#FFFFFF"
       />
@@ -100,32 +136,27 @@ const AddHabit = ({ navigation }) => {
       <TextInput
         placeholder="Descripción"
         value={description}
-        onChangeText={setDescription}
+        onChangeText={(text) => {
+          setDescription(text);
+          saveSettings();
+        }}
         style={[styles.input, { color: '#FFFFFF' }]}
         textColor="#FFFFFF"
       />
 
-      <TouchableRipple onPress={() => {
-        /* lógica de selección de color */
-      }}
-      >
-        <View style={styles.colorSelector}>
-          <Text style={styles.label}>Prioridad</Text>
-          <IconButton icon="circle" color={color || 'gray'} size={30} />
-        </View>
-      </TouchableRipple>
-
       <View style={styles.row}>
-        <Text style={styles.label}>Repetir</Text>
-        <Switch value={repeat !== ''} onValueChange={(value) => setRepeat(value ? 'Diario' : '')} />
+        <Text style={styles.label}>Prioridad</Text>
       </View>
 
       <View style={styles.repeatOptions}>
-        {['Diario', 'Semanalmente', 'Mensualmente'].map((option) => (
+        {['Baja', 'Media', 'Alta'].map((option) => (
           <Button
             key={option}
             mode={repeat === option ? 'contained' : 'outlined'}
-            onPress={() => setRepeat(option)}
+            onPress={() => {
+              setRepeat(option);
+              saveSettings();
+            }}
             style={styles.optionButton}
           >
             {option}
@@ -133,48 +164,25 @@ const AddHabit = ({ navigation }) => {
         ))}
       </View>
 
-      {/* Mostrar sección "En estos días" solo si repeat no está vacío */}
-      {repeat && (
-        <>
-          <Text style={styles.label}>En estos días</Text>
-          <View style={styles.days}>
-            {Object.keys(days).map((day) => (
-              <Button
-                key={day}
-                mode={days[day] ? 'contained' : 'outlined'}
-                onPress={() => toggleDay(day)}
-                style={styles.dayButton}
-              >
-                {day}
-              </Button>
-            ))}
-          </View>
-        </>
-      )}
-          <View style={styles.row}>
-            <Text style={styles.label}>Reminder</Text>
-            <Switch value={reminder} onValueChange={setReminder} />
-          </View>
-
-          <View style={styles.row}>
-            <Text style={styles.label}>Goal</Text>
-            <Switch value={goal} onValueChange={setGoal} />
-          </View>
-
-          <TouchableRipple onPress={() => { /* lógica de rutina */ }}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Rutina</Text>
-              <Text style={styles.selectText}>Seleccionar</Text>
-            </View>
-          </TouchableRipple>
-
-          <Button mode="contained" onPress={() => { /* lógica de guardar */
-
-          }} style={styles.saveButton}>
-            Guardar
+      <Text style={styles.label}>Repetir</Text>
+      <View style={styles.days}>
+        {Object.keys(days).map((day) => (
+          <Button
+            key={day}
+            mode={days[day] ? 'contained' : 'outlined'}
+            onPress={() => toggleDay(day)}
+            style={styles.dayButton}
+          >
+            {day}
           </Button>
-        </View>
-      );
+        ))}
+      </View>
+
+      <Button mode="contained" onPress={saveSettings} style={styles.saveButton}>
+        Guardar
+      </Button>
+    </View>
+  );
 };
 
-      export default AddHabit;
+export default AddHabit;
