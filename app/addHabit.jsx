@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInput, Button, Text } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
+import { auth } from '../firebaseConfig'; 
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#000' },
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
 
 
 const AddHabit = ({ }) => {
+  
   const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -40,20 +43,29 @@ const AddHabit = ({ }) => {
     Lun: false, Mar: false, Mie: false, Jue: false, Vie: false, Sab: false, Dom: false,
   });*/
 
+  
+  const userEmail = "usuario@ejemplo.com";
   const saveHabit = async () => {
     try {
+      const currentUser = auth.currentUser;
+    const userEmail = currentUser ? currentUser.email : null;
+
+    if (!userEmail) {
+      console.log("Usuario no autenticado.");
+      return;
+    }
       const newHabit = { title, description, importance};
       
-      // Obtener los hábitos existentes
-      const storedHabits = await AsyncStorage.getItem('habits');
-      const habits = storedHabits ? JSON.parse(storedHabits) : [];
+       // Obtén los hábitos almacenados para este usuario en particular
+    const storedHabits = await AsyncStorage.getItem(`habits_${userEmail}`);
+    const habits = storedHabits ? JSON.parse(storedHabits) : [];
 
       // Agregar el nuevo hábito
       habits.push(newHabit);
 
-      // Guardar en AsyncStorage
-      await AsyncStorage.setItem('habits', JSON.stringify(habits));
-      console.log("Hábito guardado exitosamente");
+      // Guarda los hábitos en AsyncStorage usando el correo como parte de la clave
+    await AsyncStorage.setItem(`habits_${userEmail}`, JSON.stringify(habits));
+    console.log("Hábito guardado exitosamente");
 
       // Navegar a la lista de hábitos
       navigation.navigate('habitList');
@@ -61,6 +73,18 @@ const AddHabit = ({ }) => {
       console.log("Error al guardar el hábito:", error);
     }
   };
+
+  // Para cargar los hábitos específicos del usuario en otra pantalla
+const fetchHabits = async () => {
+  try {
+    const storedHabits = await AsyncStorage.getItem(`habits_${userEmail}`);
+    if (storedHabits) {
+      setHabits(JSON.parse(storedHabits));
+    }
+  } catch (error) {
+    console.log("Error obteniendo los hábitos:", error);
+  }
+};
 
   return (
     <View style={styles.container}>

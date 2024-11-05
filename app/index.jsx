@@ -1,5 +1,5 @@
 import React from "react";
-//import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 import RootStack from "./rootStack"; // Asegúrate de crear y configurar este archivo (explicado abajo)
 
@@ -16,11 +16,11 @@ const theme = {
 
 const App = () => {
     return (
-        <PaperProvider theme={theme}>
-            
+        <NavigationContainer>
+            <PaperProvider theme={theme}>            
                 <RootStack />
-            
-        </PaperProvider>
+            </PaperProvider>
+        </NavigationContainer>    
     );
 };
 

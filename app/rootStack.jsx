@@ -1,6 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./login"; // Ajusta la ruta según la ubicación del archivo
+import Login from "./login"; 
 import Register from "./register";
 import HabitList from "./habitList";
 import HabitDetail from "./habitDetail";
@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 
 export default function RootStack() {
     return (
-        <NavigationContainer>
+
         <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="login" component={Login} options={{ title: "Iniciar Sesión" }} />
             <Stack.Screen name="register" component={Register} options={{ title: "Registrar" }} />
@@ -18,6 +18,6 @@ export default function RootStack() {
             <Stack.Screen name="habitDetail" component={HabitDetail} options={{ title: "Detalle de Hábitos" }} />
             <Stack.Screen name="addHabit" component={AddHabit} options={{ title: "Añadir Hábito" }} />
         </Stack.Navigator>
-        </NavigationContainer>
+
     );
 }
