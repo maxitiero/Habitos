@@ -1,6 +1,5 @@
 import "react-native-gesture-handler"; // Asegúrate de que esta línea esté primero
 import React, { useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { initializeDatabase } from "./app/database/database";
 import Login from "./screens/Login";
@@ -15,19 +14,17 @@ export default function App() {
     }, []);
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen
-                    name="Login"
-                    component={Login}
-                    options={{ headerShown: false }} // Oculta el header para la pantalla de Login
-                />
-                <Stack.Screen
-                    name="Home"
-                    component={HabitDetail}
-                    options={{ headerShown: false }} // Oculta el header para la pantalla de Home
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false }} // Oculta el header para la pantalla de Login
+            />
+            <Stack.Screen
+                name="Home"
+                component={HabitDetail}
+                options={{ headerShown: false }} // Oculta el header para la pantalla de Home
+            />
+        </Stack.Navigator>
     );
 }
