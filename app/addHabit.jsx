@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState } from 'react'; 
 import { View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TextInput, Button, Switch, Text, TouchableRipple, IconButton } from 'react-native-paper';
+import { TextInput, Button, Text } from 'react-native-paper';
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: '#000',
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFF',
-    marginBottom: 16,
-  },
-  input: {
-    marginBottom: 16,
-    backgroundColor: '#1e1e1e',
-    color: '#FFFFFF',
-  },
+  container: { flex: 1, padding: 16, backgroundColor: '#000' },
+  header: { fontSize: 28, fontWeight: 'bold', color: '#FFF', marginBottom: 16 },
+  input: { marginBottom: 16, backgroundColor: '#1e1e1e', color: '#FFFFFF' },
+  saveButton: { marginTop: 16, backgroundColor: '#007AFF' },
   label: {
     color: '#FFF',
     fontSize: 16,
@@ -30,7 +19,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 16,
   },
-  repeatOptions: {
+  importanceOptions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
@@ -39,83 +28,38 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 4,
   },
-  days: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-    marginTop: '15px',
-  },
-  dayButton: {
-    flex: 1,
-    marginHorizontal: 4,
-  },
-  selectText: {
-    color: '#FFF',
-  },
-  saveButton: {
-    marginTop: 16,
-    backgroundColor: '#007AFF',
-  },
 });
 
-const AddHabit = ({ navigation }) => {
+
+const AddHabit = ({ }) => {
+  const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [color, setColor] = useState('');
-  const [repeat, setRepeat] = useState('Daily');
-  const [days, setDays] = useState({
-    Lun: false,
-    Mar: false,
-    Mie: false,
-    Jue: false,
-    Vie: false,
-    Sab: false,
-    Dom: false,
-  });
+  const [importance, setImportance] = useState('Baja');
+  /*const [days, setDays] = useState({
+    Lun: false, Mar: false, Mie: false, Jue: false, Vie: false, Sab: false, Dom: false,
+  });*/
 
-  // Cargar configuración guardada al iniciar el componente
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const savedTitle = await AsyncStorage.getItem('title');
-        const savedDescription = await AsyncStorage.getItem('description');
-        const savedColor = await AsyncStorage.getItem('color');
-        const savedRepeat = await AsyncStorage.getItem('repeat');
-        const savedDays = await AsyncStorage.getItem('days');
-        
-        if (savedTitle) setTitle(savedTitle);
-        if (savedDescription) setDescription(savedDescription);
-        if (savedColor) setColor(savedColor);
-        if (savedRepeat) setRepeat(savedRepeat);
-        if (savedDays) setDays(JSON.parse(savedDays));
-      } catch (error) {
-        console.log("Error loading settings:", error);
-      }
-    };
-
-    loadSettings();
-  }, []);
-
-  // Guardar configuración al actualizar el estado
-  const saveSettings = async () => {
+  const saveHabit = async () => {
     try {
-      await AsyncStorage.setItem('title', title);
-      await AsyncStorage.setItem('description', description);
-      await AsyncStorage.setItem('color', color);
-      await AsyncStorage.setItem('repeat', repeat);
-      await AsyncStorage.setItem('days', JSON.stringify(days));
-      console.log("Settings saved successfully");
-    } catch (error) {
-      console.log("Error saving settings:", error);
-    }
-  };
+      const newHabit = { title, description, importance};
+      
+      // Obtener los hábitos existentes
+      const storedHabits = await AsyncStorage.getItem('habits');
+      const habits = storedHabits ? JSON.parse(storedHabits) : [];
 
-  const toggleDay = (day) => {
-    setDays((prevDays) => {
-      const newDays = { ...prevDays, [day]: !prevDays[day] };
-      saveSettings();  // Guardar configuración cuando se cambian los días
-      return newDays;
-    });
+      // Agregar el nuevo hábito
+      habits.push(newHabit);
+
+      // Guardar en AsyncStorage
+      await AsyncStorage.setItem('habits', JSON.stringify(habits));
+      console.log("Hábito guardado exitosamente");
+
+      // Navegar a la lista de hábitos
+      navigation.navigate('habitList');
+    } catch (error) {
+      console.log("Error al guardar el hábito:", error);
+    }
   };
 
   return (
@@ -125,37 +69,30 @@ const AddHabit = ({ navigation }) => {
       <TextInput
         placeholder="Título"
         value={title}
-        onChangeText={(text) => {
-          setTitle(text);
-          saveSettings();
-        }}
+        onChangeText={setTitle}
         style={styles.input}
         textColor="#FFFFFF"
       />
-
       <TextInput
         placeholder="Descripción"
         value={description}
-        onChangeText={(text) => {
-          setDescription(text);
-          saveSettings();
-        }}
-        style={[styles.input, { color: '#FFFFFF' }]}
+        onChangeText={setDescription}
+        style={styles.input}
         textColor="#FFFFFF"
       />
-
+      
       <View style={styles.row}>
-        <Text style={styles.label}>Prioridad</Text>
+        <Text style={styles.label}>Importancia</Text>
       </View>
 
-      <View style={styles.repeatOptions}>
+      <View style={styles.importanceOptions}>
         {['Baja', 'Media', 'Alta'].map((option) => (
           <Button
             key={option}
-            mode={repeat === option ? 'contained' : 'outlined'}
+            mode={importance === option ? 'contained' : 'outlined'}
             onPress={() => {
-              setRepeat(option);
-              saveSettings();
+              setImportance(option);
+              //saveSettings();
             }}
             style={styles.optionButton}
           >
@@ -164,21 +101,7 @@ const AddHabit = ({ navigation }) => {
         ))}
       </View>
 
-      <Text style={styles.label}>Repetir</Text>
-      <View style={styles.days}>
-        {Object.keys(days).map((day) => (
-          <Button
-            key={day}
-            mode={days[day] ? 'contained' : 'outlined'}
-            onPress={() => toggleDay(day)}
-            style={styles.dayButton}
-          >
-            {day}
-          </Button>
-        ))}
-      </View>
-
-      <Button mode="contained" onPress={saveSettings} style={styles.saveButton}>
+      <Button mode="contained" onPress={saveHabit} style={styles.saveButton}>
         Guardar
       </Button>
     </View>

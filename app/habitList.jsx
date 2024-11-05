@@ -1,87 +1,72 @@
-import React from "react";
-import { Text, Button } from "react-native-paper";
-import { getAuth } from "firebase/auth";
-import { useState, useEffect } from "react";
-import { db } from "../firebaseConfig";
-import { useNavigation } from "@react-navigation/native";
-import HabitItem from "./habitItem";
-import { View, FlatList, StyleSheet } from "react-native";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Text, Button } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import HabitItem from './habitItem';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
-    button: {
-        height: 40,
-        width: "100%",
-    },
-    textContainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 20,
-    },
-    text: {
-        textAlign: "center",
-        fontSize: 16,
-        padding: 20,
-    },
+  button: { height: 40, width: "100%" },
+  textContainer: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
+  text: { textAlign: "center", fontSize: 16, padding: 20 },
 });
-const HabitList = () => {
-    const [habitos, setHabitos] = useState([]);
-    const auth = getAuth();
 
-    useEffect(() => {
-        const fetchHabitos = async () => {
-            const userId = auth.currentUser?.uid;
-            if (!userId) return;
-            const habitosQuery = query(
-                collection(db, "habitos"),
-                where("userId", "==", userId)
-            );
-            const querySnapshot = await getDocs(habitosQuery);
-            const habitosData = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setHabitos(habitosData);
-        };
-        fetchHabitos();
-    }, []);
+const HabitList = ({ }) => {
+  const navigation = useNavigation();
+  const [habits, setHabits] = useState([]);
 
-    const handleAddHabit = () => {
-        navigation.navigate("addHabit");
+  useEffect(() => {
+    const fetchHabits = async () => {
+      try {
+        const storedHabits = await AsyncStorage.getItem('habits');
+        if (storedHabits) {
+          setHabits(JSON.parse(storedHabits));
+        }
+      } catch (error) {
+        console.log("Error obteniendo los hábitos:", error);
+      }
     };
+    fetchHabits();
+  }, []);
 
-    if (habitos.length === 0) {
-        return (
-            <View style={styles.textContainer}>
-                <Text style={styles.text}>
-                    No tiene habitos cargados. Si desea agregar uno presione el
-                    boton Agregar Habitos
-                </Text>
-                <Button
-                    style={styles.button}
-                    title="Agregar Habito"
-                    onPress={handleAddHabit}
-                    mode="contained"
-                >
-                    Agregar Habito
-                </Button>
-            </View>
-        );
-    }
+  const handleAddHabit = () => {
+    navigation.navigate("addHabit");
+  };
 
+ 
     return (
-        <FlatList
-            data={habitos}
-            keyExtractor={(item) => item.id}
+        <View style={{ flex: 1 }}>
+        {habits.length === 0 ? (
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>
+              No tiene hábitos cargados. Si desea agregar uno presione el botón Agregar Hábitos.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={habits}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-                <HabitItem
-                    descripcion={item.descripcion}
-                    importancia={item.importancia}
-                />
+              <HabitItem
+                title={item.title}
+                descripcion={item.description}
+                importancia={item.importance} // Usar 'importance' ya que este es el campo de prioridad
+              />
             )}
-        />
-    );
+          />
+        )}
+        <View style={styles.textContainer}>
+          <Button
+            style={styles.button}
+            onPress={handleAddHabit}
+            mode="contained"
+          >
+            Agregar Hábito
+          </Button>
+        </View>
+      </View>
+
+  );
 };
 
 export default HabitList;
