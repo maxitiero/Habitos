@@ -3,6 +3,7 @@ import { Text, Button } from "react-native-paper";
 import { getAuth } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { db } from "../firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
 import HabitItem from "./habitItem";
 import { View, FlatList, StyleSheet } from "react-native";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -33,7 +34,7 @@ const HabitList = () => {
             const userId = auth.currentUser?.uid;
             if (!userId) return;
             const habitosQuery = query(
-                collection(db, habitos),
+                collection(db, "habitos"),
                 where("userId", "==", userId)
             );
             const querySnapshot = await getDocs(habitosQuery);
@@ -46,7 +47,9 @@ const HabitList = () => {
         fetchHabitos();
     }, []);
 
-    const handleAddHabit = () => {};
+    const handleAddHabit = () => {
+        navigation.navigate("addHabit");
+    };
 
     if (habitos.length === 0) {
         return (
