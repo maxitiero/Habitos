@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
+import {  View, StyleSheet } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 import { auth } from '../firebaseConfig';  // Asegúrate de importar tu archivo de configuración de Firebase
 import { useNavigation } from '@react-navigation/native'
 
@@ -19,8 +19,13 @@ const LogOutButton = ({ onLogout }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Cerrar Sesión</Text>
-      <Button mode="contained" onPress={handleLogout} style={styles.button}>
+      <Text style={styles.header}></Text>
+      <Button mode="contained"
+        onPress={handleLogout}
+        contentStyle={styles.buttonContent}
+        labelStyle={styles.buttonLabel}
+        style={styles.button}
+      >
         Cerrar Sesión
       </Button>
     </View>
@@ -37,9 +42,21 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     marginBottom: 16,
+    color: '#333',
   },
   button: {
-    width: '100%',
+    backgroundColor: '#FF5722', // Color principal del botón
+    borderRadius: 25, // Bordes redondeados
+    paddingHorizontal: 10,
+    elevation: 3, // Efecto de sombra
+  },
+  buttonContent: {
+    height: 50, // Ajusta la altura del botón
+  },
+  buttonLabel: {
+    fontSize: 16,
+    color: '#FFF', // Cambia el color del texto del botón
+    fontWeight: 'bold',
   },
 });
 

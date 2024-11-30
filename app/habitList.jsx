@@ -16,9 +16,16 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     text: { textAlign: "center", fontSize: 16, padding: 20 },
-    logOut: {
-        alignSelf: 'center', // Esto asegura que el botón esté centrado verticalmente.
-        marginLeft: 'auto', 
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end', // Alinea el botón a la derecha
+        padding: 16,
+        alignItems: "center", // Centra el contenido verticalmente
+    },
+    logOutContainer: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "flex-end", // Ubica el botón al final horizontalmente
     },
 });
 
@@ -80,15 +87,9 @@ const HabitList = () => {
     return (
         <View style={{ flex: 1 }}>
             <View style={styles.header}>
-                {/* Botón de cerrar sesión */}
-                {auth.currentUser && (
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                        <LogOutButton
-                            style={styles.logOut}
-                            onLogout={handleLogout}
-                        />
-                    </View>
-                )}
+                <View style={styles.logOutContainer}>
+                    <LogOutButton />
+                </View>
             </View>
             {habits.length === 0 ? (
                 <View style={styles.textContainer}>
