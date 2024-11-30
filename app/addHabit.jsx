@@ -8,28 +8,37 @@ import { auth } from '../firebaseConfig';
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: '#000' },
-  header: { fontSize: 28, fontWeight: 'bold', color: '#FFF', marginBottom: 16 },
-  input: { marginBottom: 16, backgroundColor: '#1e1e1e', color: '#FFFFFF' },
-  saveButton: { marginTop: 16, backgroundColor: '#007AFF' },
-  label: {
-    color: '#FFF',
+  header: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#FFF",
+    marginBottom: 16,
+},  
+input: { 
+  marginBottom: 16, 
+  backgroundColor: "#1e1e1e", 
+  color: "#FFFFFF" 
+},
+saveButton: { marginTop: 16, backgroundColor: "#007AFF" },
+label: {
+    color: "#FFF",
     fontSize: 16,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+},
+row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
-  },
-  importanceOptions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+},
+importanceOptions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 16,
-  },
-  optionButton: {
+},
+optionButton: {
     flex: 1,
     marginHorizontal: 4,
-  },
+},
 });
 
 
@@ -125,7 +134,11 @@ const fetchHabits = async () => {
         ))}
       </View>
 
-      <Button mode="contained" onPress={saveHabit} style={styles.saveButton}>
+      <Button 
+        mode="contained" 
+        onPress={saveHabit} 
+        style={styles.saveButton}
+      >
         Guardar
       </Button>
     </View>

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     description: {
-        marginTop: '5px',
+        marginTop: '10px',
         fontSize: 16,
     },
     subtitle: {
@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
     },
 });
 
-const HabitItem = ({ title, descripcion, importancia }) => (
+const HabitItem = ({ title, description, importance }) => (
     <Card style={styles.card}>
         <View style={styles.content}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{descripcion}</Text>
-            <Text style={styles.subtitle}>Importancia: {importancia}</Text>
+            <Text style={styles.description}>{description}</Text>
+            <Text style={styles.subtitle}>Importancia: {importance}</Text>
         </View>
     </Card>
 );

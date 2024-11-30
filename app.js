@@ -15,19 +15,17 @@ export default function App() {
     }, []);
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
-                <Stack.Screen
-                    name="Login"
-                    component={Login}
-                    options={{ headerShown: false }} // Oculta el header para la pantalla de Login
-                />
-                <Stack.Screen
-                    name="Home"
-                    component={HabitDetail}
-                    options={{ headerShown: false }} // Oculta el header para la pantalla de Home
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }} // Oculta el header para la pantalla de Login
+        />
+        <Stack.Screen
+            name="Home"
+            component={HabitDetail}
+            options={{ headerShown: false }} // Oculta el header para la pantalla de Home
+        />
+    </Stack.Navigator>
     );
 }
