@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         padding: 16,
-        width: "80%",
+        width: "100%",
         alignItems: "center",
         marginHorizontal: "auto",
     },
     input: {
-        height: 40,
+        height: 50,
         borderColor: "gray",
         borderWidth: 1,
         marginBottom: 12,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     },
 
     buttonLogIn: {
-        height: 40,
+        height: 50,
         width: "100%",
     },
     buttonSignUp: {

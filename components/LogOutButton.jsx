@@ -1,7 +1,7 @@
 import React from 'react';
 import {  View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import { auth } from '../firebaseConfig';  // Asegúrate de importar tu archivo de configuración de Firebase
+import { auth } from '../firebaseConfig';  
 import { useNavigation } from '@react-navigation/native'
 
 const LogOutButton = ({ onLogout }) => {
@@ -20,7 +20,9 @@ const LogOutButton = ({ onLogout }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}></Text>
-      <Button mode="contained"
+      <Button 
+        icon="logout"
+        mode="contained"
         onPress={handleLogout}
         contentStyle={styles.buttonContent}
         labelStyle={styles.buttonLabel}
@@ -45,9 +47,8 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   button: {
-    backgroundColor: '#FF5722', // Color principal del botón
+    backgroundColor: '#F44336', // Color principal del botón
     borderRadius: 25, // Bordes redondeados
-    paddingHorizontal: 10,
     elevation: 3, // Efecto de sombra
   },
   buttonContent: {
